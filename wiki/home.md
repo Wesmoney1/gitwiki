@@ -6,3 +6,13 @@ GitWiki is a simple wiki software based off of [Wikipedia](https://wikipedia.com
 * Admin-only features
 * Deleting pages
 * No editing the home page
+
+And, by the way, I need to make sure that all of markdown works.
+*Italics*
+<br>
+**Bold**
+<br>
+X | Y
+--|--
+A | B
+C | D
