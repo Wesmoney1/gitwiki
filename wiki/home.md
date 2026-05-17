@@ -8,10 +8,12 @@ GitWiki is a simple wiki software based off of [Wikipedia](https://wikipedia.com
 * No editing the home page
 
 And, by the way, I need to make sure that all of markdown works.
+<br>
 *Italics*
 <br>
 **Bold**
 <br>
+Table!
 X | Y
 --|--
 A | B
