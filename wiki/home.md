@@ -18,3 +18,5 @@ X | Y
 --|--
 A | B
 C | D
+
+Also, you can make articles in Google Docs, and then save them as MD files, and paste them here which is pretty cool.
