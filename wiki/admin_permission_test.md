@@ -1,5 +1,5 @@
 ---
-editors: ["iheartkpsu"]
+editors: []
 ---
 
 # TEST
