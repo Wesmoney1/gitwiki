@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitWiki Editor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Configure Tailwind to use class-based dark mode
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
+</head>
+<body class="bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100 min-h-screen transition-colors duration-200">
+
+    <nav class="bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700 px-6 py-4 flex justify-between items-center shadow-sm">
+        <a href="index.html" class="text-xl font-bold text-blue-600">GitWiki</a>
+        <span class="text-xs text-gray-400 font-mono bg-gray-100 px-2 py-1 rounded">Editor Mode</span>
+    </nav>
+
+    <main class="flex-1 max-w-4xl w-full mx-auto px-6 py-10">
+        <h1 id="editor-heading" class="text-3xl font-serif font-bold mb-6">Create New Article</h1>
+
+        <form id="editor-form" class="space-y-6 bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Article Slug (URL identifier)</label>
+                <input type="text" id="page-slug" required placeholder="e.g., quantum_mechanics" class="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-700 text-gray-900 dark:text-gray-100 p-2.5 rounded-md text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none font-mono">
+            </div>
+
+            <div class="space-y-1">
+                <label class="text-xs font-semibold tracking-wide text-gray-500 uppercase block">Permitted Editors (Optional)</label>
+                <input type="text" id="page-editors" placeholder="e.g., admin, user123 (leave blank for everyone)" class="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 p-2.5 rounded-md text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Markdown Content Document</label>
+                <textarea id="page-content" required rows="14" placeholder="# Title Here..." class="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 p-3 rounded-md text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none font-mono"></textarea>
+            </div>
+
+            <div class="flex items-center justify-between border-t pt-4">
+                <p class="text-xs text-gray-400 max-w-md">Saving publishes changes directly by executing a secure API invocation to commit updates straight to the master repository branch.</p>
+                <div class="flex gap-3">
+                    <a href="index.html" class="text-sm font-medium text-gray-600 px-4 py-2 hover:underline self-center">Cancel</a>
+                    <button type="submit" class="bg-blue-600 text-white px-5 py-2 rounded-md font-medium text-sm hover:bg-blue-700 shadow transition">Publish Changes</button>
+                </div>
+            </div>
+        </form>
+    </main>
+
+    <script>
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+
+        // Function to call when clicking your theme toggle button
+        function toggleTheme() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+        // Block unauthorized visits immediately
+        if (!localStorage.getItem('wiki_session')) {
+            alert("Access Denied: Please log in on the homepage first.");
+            window.location.href = "index.html";
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const editTarget = urlParams.get('edit');
+        const WORKER_URL = "https://gitwiki.1962fenderjaguar.workers.dev";
+
+        const slugInput = document.getElementById('page-slug');
+        const contentInput = document.getElementById('page-content');
+
+        // If 'edit' parameter exists, load current file data from Worker API
+        if (editTarget) {
+            document.getElementById('editor-heading').innerText = `Editing Page: ${editTarget}`;
+            slugInput.value = editTarget;
+            slugInput.disabled = true;
+            slugInput.classList.add('bg-gray-100', 'text-gray-400');
+
+            // Fetch live source directly to populating editor window
+            fetch(`${WORKER_URL}/api/get?page=${editTarget}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.content) contentInput.value = data.content;
+                });
+        }
+
+        document.getElementById('editor-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const targetSlug = slugInput.value.trim().toLowerCase().replace(/\s+/g, '_');
+            let rawContent = contentInput.value;
+            const editorsInputValue = document.getElementById('page-editors').value.trim();
+            const sessionToken = localStorage.getItem('wiki_session');
+
+            // Clean up content by stripping out any existing front matter the user might have copy-pasted
+            if (rawContent.startsWith("---")) {
+                const endOfOldFM = rawContent.indexOf("---", 3);
+                if (endOfOldFM !== -1) {
+                    rawContent = rawContent.slice(endOfOldFM + 3).trim();
+                }
+            }
+
+            // Build the dynamic front matter string block
+            let finalContentWithMetadata = "";
+            if (editorsInputValue.length > 0) {
+                // Format names cleanly into a string array format: ["name1", "name2"]
+                const formattedArray = editorsInputValue
+                    .split(",")
+                    .map(name => `"${name.trim()}"`)
+                    .join(", ");
+
+                finalContentWithMetadata = `---\neditors: [${formattedArray}]\n---\n\n${rawContent}`;
+            } else {
+                // No explicit restrictions specified, save open metadata format
+                finalContentWithMetadata = `---\neditors: []\n---\n\n${rawContent}`;
+            }
+
+            try {
+                const response = await fetch(`${WORKER_URL}/api/save`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${sessionToken}`
+                    },
+                    body: JSON.stringify({ slug: targetSlug, updatedContent: finalContentWithMetadata })
+                });
+
+                if (response.ok) {
+                    window.location.href = `articles.html?page=${targetSlug}`;
+                } else {
+                    const errData = await response.json();
+                    alert(`Error saving document: ${errData.error}`);
+                }
+            } catch (err) {
+                alert("Failed to communicate with edge API route.");
+            }
+        });
+    </script>
+</body>
+</html>

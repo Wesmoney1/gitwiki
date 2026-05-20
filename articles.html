@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitWiki Articles</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Configure Tailwind to use class-based dark mode
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
+    <style>
+        /* Force classic, clean Wiki styling on any Markdown elements inside the article body */
+        #article-body h1 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 0.5rem;
+        }
+        #article-body h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-top: 1.75rem;
+            margin-bottom: 0.75rem;
+            border-bottom: 1px solid #f3f4f6;
+            padding-bottom: 0.25rem;
+        }
+        #article-body h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        #article-body p {
+            margin-bottom: 1rem;
+            line-height: 1.75;
+            font-size: 1rem;
+            color: #374151;
+        }
+        #article-body ul {
+            list-style-type: disc;
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+            space-y: 0.25rem;
+        }
+        #article-body ol {
+            list-style-type: decimal;
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        #article-body li {
+            margin-bottom: 0.25rem;
+            line-height: 1.6;
+        }
+        #article-body a {
+            color: #2563eb;
+            text-decoration: underline;
+            font-weight: 500;
+        }
+        #article-body a:hover {
+            color: #1d4ed8;
+        }
+        #article-body code {
+            background-color: #f3f4f6;
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.25rem;
+            font-family: monospace;
+            font-size: 0.875rem;
+        }
+
+        .dark #article-body p {
+            color: #d1d5db; /* gray-300 */
+        }
+        .dark #article-body h1 {
+            border-color: #374151; /* gray-700 */
+        }
+        .dark #article-body h2 {
+            border-color: #374151; /* gray-700 */
+        }
+        .dark #article-body a {
+            color: #60a5fa; /* blue-400 */
+        }
+        .dark #article-body a:hover {
+            color: #93c5fd; /* blue-300 */
+        }
+        .dark #article-body code {
+            background-color: #374151; /* gray-700 */
+            color: #f3f4f6; /* gray-100 */
+        }
+    </style>
+    <!-- Marked.js library to parse Markdown strings into standard HTML output -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body class="bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100 min-h-screen transition-colors duration-200">
+
+    <nav class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-4 flex justify-between items-center shadow-sm">
+        <a href="index.html" class="text-xl font-bold text-blue-600">GitWiki</a>
+        <div id="action-buttons" class="flex gap-2">
+            <!-- Edit buttons appear here dynamically if a token exists -->
+        </div>
+        <div class="relative w-64 hidden sm:block">
+            <input type="text" id="search-input" placeholder="Search pages..."
+                   class="w-full bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 border border-transparent focus:border-blue-500 focus:bg-white dark:focus:bg-gray-800 p-2 pl-3 rounded-md text-sm focus:outline-none transition">
+
+            <ul id="search-results" class="absolute left-0 right-0 mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg max-h-60 overflow-y-auto hidden z-50 text-sm">
+                </ul>
+        </div>
+    </nav>
+
+    <div class="max-w-5xl w-full mx-auto px-6 py-10 flex flex-col md:flex-row gap-8">
+        <!-- Main Document Output -->
+        <article class="flex-1 bg-white p-8 border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
+            <h1 id="article-title" class="text-4xl font-serif font-bold border-b pb-2 mb-6 capitalize">Loading Article...</h1>
+            <div id="article-body" class="prose max-w-none text-gray-800 leading-relaxed space-y-4">
+    </div>
+        </article>
+
+        <!-- Wikipedia-Style Sidebar Metadata Box (Infobox) -->
+        <aside class="w-full md:w-72 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden shadow-sm self-start">
+            <div class="bg-gray-100 dark:bg-gray-700 p-3 text-center font-bold text-sm border-b border-gray-200 dark:border-gray-600 text-gray-900 dark:text-gray-100">Article Metadata</div>
+            <table class="w-full text-xs text-left border-collapse p-4">
+                <tbody>
+                    <tr class="border-b dark:border-gray-700"><th class="p-3 text-gray-500 dark:text-gray-400 font-medium">Format</th><td class="p-3 font-mono text-gray-700 dark:text-gray-300">Markdown (.md)</td></tr>
+                    <tr class="border-b dark:border-gray-700"><th class="p-3 text-gray-500 dark:text-gray-400 font-medium">Data Store</th><td class="p-3 text-blue-600 dark:text-blue-400 hover:underline"><a href="#">GitHub Repository</a></td></tr>
+                    <tr><th class="p-3 text-gray-500 dark:text-gray-400 font-medium">Engine</th><td class="p-3 text-gray-700 dark:text-gray-300">Serverless Edge</td></tr>
+                </tbody>
+            </table>
+        </aside>
+    </div>
+
+    <script>
+        // On page load, apply the saved theme or fall back to light mode
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+
+        // Function to call when clicking your theme toggle button
+        function toggleTheme() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+        // 1. Parse the ?page= URL parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const slug = urlParams.get('page') || 'home';
+        const WORKER_URL = "https://gitwiki.1962fenderjaguar.workers.dev";
+
+        // 2. Setup Action buttons dynamically if session exists
+        const actionDiv = document.getElementById('action-buttons');
+        if (localStorage.getItem('wiki_session')) {
+            actionDiv.innerHTML = `<a href="make.html?edit=${slug}" class="bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 px-4 py-1.5 rounded text-sm font-medium hover:bg-gray-200 dark:hover:bg-gray-600">Edit This Page</a>`;
+        }
+
+        // Custom parser middleware to turn [[Wiki Links]] into links matching our file structure
+        function resolveWikiLinks(text) {
+            return text.replace(/\[\[(.*?)\]\]/g, (match, innerContent) => {
+                let displayText = innerContent;
+                let targetPage = innerContent;
+
+                if (innerContent.includes('|')) {
+                    const parts = innerContent.split('|');
+                    displayText = parts[0].trim();
+                    targetPage = parts[1].trim();
+                }
+
+                if (targetPage.endsWith('.html')) {
+                    return `<a class="text-blue-600 hover:underline font-medium" href="${targetPage}">${displayText}</a>`;
+                }
+
+                const targetSlug = targetPage.toLowerCase().trim().replace(/\s+/g, '_');
+                return `<a class="text-blue-600 hover:underline font-medium" href="articles.html?page=${targetSlug}">${displayText}</a>`;
+            });
+        }
+
+        // 3. Render Pipeline (Fetching live content directly from edge storage nodes)
+        document.getElementById('article-title').innerText = slug.replace(/_/g, ' ');
+
+        fetch(`${WORKER_URL}/api/get?page=${slug}`)
+            .then(res => {
+                if (!res.ok) throw new Error("Not Found");
+                return res.json();
+            })
+            .then(data => {
+                let cleanMarkdown = data.content;
+
+                // If front matter is detected, strip it out before handing it over to marked.js
+                if (cleanMarkdown.startsWith("---")) {
+                    const endOfFrontMatter = cleanMarkdown.indexOf("---", 3);
+                    if (endOfFrontMatter !== -1) {
+                        cleanMarkdown = cleanMarkdown.slice(endOfFrontMatter + 3).trim();
+                    }
+                }
+
+                let HTMLOutput = marked.parse(cleanMarkdown);
+                document.getElementById('article-body').innerHTML = resolveWikiLinks(HTMLOutput);
+            })
+
+            const searchInput = document.getElementById('search-input');
+        const searchResults = document.getElementById('search-results');
+        let allPages = []; // Will hold our list of slugs strings, e.g., ['main_page', 'retro_computing']
+
+        // 1. Fetch available pages from the Worker API on initialization
+        async function initSearch() {
+            try {
+                // Assumes your Worker has an endpoint that returns an array of page slugs
+                const response = await fetch(`${WORKER_URL}/api/pages`);
+                if (response.ok) {
+                    allPages = await response.json();
+                }
+            } catch (err) {
+                console.error("Failed to load search index", err);
+            }
+        }
+
+        // 2. Filter list based on user input string
+        searchInput.addEventListener('input', () => {
+            const query = searchInput.value.trim().toLowerCase();
+            searchResults.innerHTML = ''; // Clear prior entries
+
+            if (!query) {
+                searchResults.classList.add('hidden');
+                return;
+            }
+
+            // Filter slugs that match or contain the query string
+            const matches = allPages.filter(slug => slug.replace(/_/g, ' ').toLowerCase().includes(query));
+
+            if (matches.length === 0) {
+                searchResults.innerHTML = `<li class="p-3 text-gray-400 italic">No pages found</li>`;
+            } else {
+                matches.forEach(slug => {
+                    const li = document.createElement('li');
+                    const cleanName = slug.replace(/_/g, ' ');
+                    li.innerHTML = `<a href="articles.html?page=${slug}" class="block p-2.5 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 capitalize">${cleanName}</a>`;
+                    searchResults.appendChild(li);
+                });
+            }
+            searchResults.classList.remove('hidden');
+        });
+
+        // Close dropdown when clicking outside the search box container
+        document.addEventListener('click', (e) => {
+            if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+                searchResults.classList.add('hidden');
+            }
+        });
+
+        // Run index collection
+        initSearch();
+    </script>
+</body>
+</html>
