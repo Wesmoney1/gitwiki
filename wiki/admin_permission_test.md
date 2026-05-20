@@ -5,5 +5,5 @@ editors: []
 # TEST
 This is a test document for article permissions.
 
-## Edit:sdfsdf
+## Edit:
 yay it works
