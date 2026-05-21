@@ -3,26 +3,6 @@ editors: ["zthebee"]
 ---
 
 
-
-Domestic pigs
-Duration: 1 second.0:01
-Call
-Conservation status
-Domesticated
-Scientific classificationEdit this classification
-Kingdom:	Animalia
-Phylum:	Chordata
-Class:	Mammalia
-Order:	Artiodactyla
-Family:	Suidae
-Genus:	Sus
-Species:	S. domesticus
-Binomial name
-Sus domesticus
-Erxleben, 1777
-Synonyms[1]
-Sus domestica
-Sus scrofa domesticus Linnaeus, 1758
 The pig (Sus domesticus), also called swine (pl.: swine) or hog, is an omnivorous, domesticated, even-toed, hoofed mammal. It is named the domestic pig when distinguishing it from other members of the genus Sus. Some authorities consider it a subspecies of Sus scrofa (the wild boar or Eurasian boar); other authorities consider it a distinct species. Pigs were domesticated independently twice during the Neolithic, in the Near East around the Tigris Basin, and in China. When domesticated pigs arrived in Europe from the Near East, they extensively interbred with wild boar in Europe but retained their domesticated features.
 
 Pigs are farmed primarily for meat, called pork. The animal's skin or hide is used for leather. China is the world's largest pork producer, followed by the European Union and then the United States. Around 1.5 billion pigs are raised each year, producing some 120 million tonnes of meat, often cured as bacon. Some are kept as pets.
