@@ -1,0 +1,5 @@
+---
+editors: ["iheartkpsu"]
+---
+
+Weddit was a very popular platform back then. It was a posting platform like Reddit, with comments, upvotes, karma, and, well, posts. There was a simple username and password login, but originally, there was only an admin password, and then you could post without an account. However, as Wesley updated it, it changed and was backwards compatible. However, there was a fatal flaw: there was only 1 GB of storage. You could insert HTML code, and all those characters would be stacked up. There were also embedded images and GIFs, which also contributed. [REDACTED] posted lots of AI code, and it had too many characters, causing The Great Reset, needing many posts to be deleted. [PERSON] had to fix it and decide what to cut and what not to. Sadly, many milestones were lost, like the first post, and then [REDACTED] posted another one, crashing it again. However, it was less, as everything had already been almost nothing. This was dubbed The Minor Reset. Weddit lost popularity after the Great Reset and the loss of karma, and it shut down due to not enough usage, and the database on which Weddit was hosted stopped hosting it.
